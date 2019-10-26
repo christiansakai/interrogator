@@ -1,4 +1,6 @@
 use std::env;
+use std::io;
+use std::io::Write;
 use std::process;
 use std::process::Command;
 
@@ -9,12 +11,25 @@ fn main() {
     let config = Config::new(argv);
 
     loop {
+        println!("Press 'Enter' to for a question or type 'exit' to exit");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let input = input.trim();
+
+        if input == "exit" {
+            process::exit(0);
+        }
+
         let question = match config.mode {
             Mode::SDE => interrogator::pick_rand_sde(), 
             Mode::PM => interrogator::pick_rand_pm(), 
             Mode::COMMON => interrogator::pick_rand_common(), 
             Mode::ALL => interrogator::pick_rand_all(), 
         };
+
+        println!("{}", question);
 
         let mut child = Command::new("say")
             .arg(question)
