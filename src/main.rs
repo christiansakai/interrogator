@@ -54,7 +54,10 @@ enum Mode {
 impl Config {
     fn new(argv: Vec<String>) -> Config {
         if argv.len() < 2 {
-            eprintln!("Please provide MODE");
+            eprintln!(r#"
+usage: cargo run [mode]
+
+mode: sde | pm | common |all"#);
             process::exit(1);
         }
 
@@ -64,7 +67,7 @@ impl Config {
             "common" => Mode::COMMON,
             "all" => Mode::ALL,
             _ => {
-                eprintln!("Modes are: sde, pm, common, all");
+                eprintln!("modes are: sde, pm, common, all");
                 process::exit(1);
             },
         };
